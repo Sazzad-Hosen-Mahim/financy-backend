@@ -1,0 +1,30 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Booking {
+  id          Int      @id @default(autoincrement())
+  fullName    String
+  email       String
+  service     String
+  phoneNumber String
+  subject     String
+  date        DateTime
+  time        String
+  message     String
+  createdAt   DateTime @default(now())
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  resetToken      String?  // Optional
+  resetTokenExpiry DateTime? // Optional
+}
