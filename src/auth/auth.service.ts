@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
@@ -29,7 +29,7 @@ export class AuthService {
   async login(dto: LoginDto) {
     const user = await this.validateUser(dto.email, dto.password);
     if (!user) {
-      throw new Error('Invalid credentials');
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     const payload = { email: user.email, id: user.id };

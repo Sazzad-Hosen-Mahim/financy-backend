@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
@@ -23,7 +24,9 @@ export class BookingController {
   }
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(): Promise<Booking[]> {
-    return this.bookingService.findAll();
+  findAll(@Query('page') page: string, @Query('limit') limit: string) {
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 10;
+    return this.bookingService.findAll(pageNum, limitNum);
   }
 }

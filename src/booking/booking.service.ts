@@ -11,11 +11,25 @@ export class BookingService {
     return this.prisma.booking.create({ data });
   }
 
-  async findAll(): Promise<Booking[]> {
-    return this.prisma.booking.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+  async findAll(page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.booking.findMany({
+        skip,
+        take: limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+      this.prisma.booking.count(),
+    ]);
+
+    return {
+      data,
+      total,
+      page,
+      lastPage: Math.ceil(total / limit),
+    };
   }
 }
