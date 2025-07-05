@@ -7,6 +7,9 @@ import {
   HttpStatus,
   UseGuards,
   Query,
+  Param,
+  ParseIntPipe,
+  Delete,
 } from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
@@ -28,5 +31,11 @@ export class BookingController {
     const pageNum = parseInt(page) || 1;
     const limitNum = parseInt(limit) || 10;
     return this.bookingService.findAll(pageNum, limitNum);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.bookingService.delete(id);
   }
 }

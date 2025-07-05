@@ -85,4 +85,17 @@ export class AuthService {
 
     return { message: 'Password has been reset successfully' };
   }
+
+  async changePassword(userId: number, password: string) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await this.prisma.admin.update({
+      where: { id: userId },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    return { message: 'Password updated successfully' };
+  }
 }

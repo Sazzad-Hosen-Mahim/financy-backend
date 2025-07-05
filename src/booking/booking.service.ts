@@ -32,4 +32,10 @@ export class BookingService {
       lastPage: Math.ceil(total / limit),
     };
   }
+
+  async delete(id: number): Promise<Booking> {
+    return this.prisma.booking.delete({
+      where: { id },
+    });
+  }
 }
