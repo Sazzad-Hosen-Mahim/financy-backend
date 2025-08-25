@@ -8,7 +8,7 @@ async function bootstrap() {
   const allowedOrigins = [
     'http://localhost:5173', // local dev
     'http://localhost:5175', // local dev
-    'https://financy-global.vercel.app/', // deployed frontend
+    'https://financy-global.vercel.app', // deployed frontend
   ];
 
   app.use(cookieParser());
