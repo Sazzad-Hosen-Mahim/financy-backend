@@ -16,6 +16,12 @@ export class EmailService {
         pass: this.configService.get<string>('EMAIL_PASS')!,
       },
     });
+
+     this.transporter.verify().then(() => {
+      console.log('SMTP server is ready to send messages');
+    }).catch((err) => {
+      console.error('SMTP connection failed:', err);
+    });
   }
 
   async sendResetPasswordEmail(to: string, token: string) {
@@ -37,6 +43,26 @@ export class EmailService {
       await this.transporter.sendMail(mailOptions);
     } catch (error) {
       console.error('Error sending reset password email:', error);
+      throw new Error('Failed to send email');
+    }
+  }
+
+  // send booking email
+  async sendBookingConfirmationEmail(to: string) {
+    const mailOptions = {
+      from: this.configService.get<string>('EMAIL_FROM'),
+      to,
+      subject: 'Booking Confirmation',
+      html: `
+        <h1>Thank you for your booking!</h1>
+        <p>Your appointment has been successfully booked.</p>
+      `,
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+    } catch (error) {
+      console.error('Error sending booking confirmation email:', error);
       throw new Error('Failed to send email');
     }
   }
